@@ -16,6 +16,11 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 
+## To run build_runner:
+```
+$dart run build_runner watch -d
+```
+
 ## To run server:
 ```
 1° dart pub global activate json_rest_server
