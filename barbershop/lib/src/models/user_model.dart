@@ -41,11 +41,15 @@ class UserModelADM extends UserModel {
       "id": id,
       "name": name,
       "email": email,
+      "avatar": avatar,
+      "workDays": workDays,
+      "workHours": workHours,
     };
   }
 }
 
 class UserModelEmployee extends UserModel {
+  final int barberShopId;
   final List<String> workDays;
   final List<int> workHours;
 
@@ -53,6 +57,7 @@ class UserModelEmployee extends UserModel {
     required super.id,
     required super.name,
     required super.email,
+    required this.barberShopId,
     required this.workDays,
     required this.workHours,
     super.avatar,
@@ -66,6 +71,7 @@ class UserModelEmployee extends UserModel {
       avatar: json["avatar"],
       workDays: json["workHours"],
       workHours: json["workHours"],
+      barberShopId: json["barberShopId"],
     );
   }
 
@@ -77,6 +83,7 @@ class UserModelEmployee extends UserModel {
       "avatar": avatar,
       "workDays": workDays,
       "workHours": workHours,
+      "barberShopId": barberShopId,
     };
   }
 }
