@@ -1,5 +1,5 @@
 sealed class UserModel {
-  final String id;
+  final int id;
   final String name;
   final String email;
   final String? avatar;
@@ -26,14 +26,22 @@ class UserModelADM extends UserModel {
   });
 
   factory UserModelADM.fromJson(Map<String, dynamic> json) {
-    return UserModelADM(
-      id: json["id"],
-      name: json["name"],
-      email: json["email"],
-      avatar: json["avatar"],
-      workDays: json["workDays"],
-      workHours: json["workHours"],
-    );
+    return switch (json) {
+      {
+        'id': final int id,
+        'name': final String name,
+        'email': final String email,
+      } =>
+        UserModelADM(
+          id: id,
+          name: name,
+          email: email,
+          avatar: json["avatar"],
+          workDays: json["work_days"]?.cast<String>(),
+          workHours: json["work_hours"]?.cast<int>(),
+        ),
+      _ => throw ArgumentError("Invalid Json"),
+    };
   }
 
   Map<String, dynamic> toJson() {
@@ -49,7 +57,7 @@ class UserModelADM extends UserModel {
 }
 
 class UserModelEmployee extends UserModel {
-  final int barberShopId;
+  final int barbershopId;
   final List<String> workDays;
   final List<int> workHours;
 
@@ -57,22 +65,33 @@ class UserModelEmployee extends UserModel {
     required super.id,
     required super.name,
     required super.email,
-    required this.barberShopId,
+    required this.barbershopId,
     required this.workDays,
     required this.workHours,
     super.avatar,
   });
 
   factory UserModelEmployee.fromJson(Map<String, dynamic> json) {
-    return UserModelEmployee(
-      id: json["id"],
-      name: json["name"],
-      email: json["email"],
-      avatar: json["avatar"],
-      workDays: json["workHours"],
-      workHours: json["workHours"],
-      barberShopId: json["barberShopId"],
-    );
+    return switch (json) {
+      {
+        'id': final int id,
+        'name': final String name,
+        'email': final String email,
+        'barbershop_id': final int barbershopId,
+        'work_days': final List<String> workDays,
+        'work_hours': final List<int> workHours,
+      } =>
+        UserModelEmployee(
+          id: id,
+          name: name,
+          email: email,
+          avatar: json["avatar"],
+          barbershopId: barbershopId,
+          workDays: workDays.cast<String>(),
+          workHours: workHours.cast<int>(),
+        ),
+      _ => throw ArgumentError("Invalid Json"),
+    };
   }
 
   Map<String, dynamic> toJson() {
@@ -81,9 +100,9 @@ class UserModelEmployee extends UserModel {
       "name": name,
       "email": email,
       "avatar": avatar,
-      "workDays": workDays,
-      "workHours": workHours,
-      "barberShopId": barberShopId,
+      "work_days": workDays,
+      "work_hours": workHours,
+      "barbershop_id": barbershopId,
     };
   }
 }
