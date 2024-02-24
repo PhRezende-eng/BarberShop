@@ -10,6 +10,14 @@ sealed class UserModel {
     required this.email,
     this.avatar,
   });
+
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return switch (json["profile"]) {
+      'A' => UserModelADM.fromJson(json),
+      'E' => UserModelEmployee.fromJson(json),
+      _ => throw ArgumentError("User profile not found"),
+    };
+  }
 }
 
 class UserModelADM extends UserModel {

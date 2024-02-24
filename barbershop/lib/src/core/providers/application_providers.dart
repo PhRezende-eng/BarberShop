@@ -1,4 +1,6 @@
+import 'package:barber_shop/src/core/fp/either.dart';
 import 'package:barber_shop/src/core/rest_client/rest_client.dart';
+import 'package:barber_shop/src/models/user_model.dart';
 import 'package:barber_shop/src/repositories/user_repository.dart';
 import 'package:barber_shop/src/repositories/user_repository_impl.dart';
 import 'package:barber_shop/src/services/users_login/user_login_service.dart';
@@ -20,3 +22,13 @@ UserLoginService userLoginService(UserLoginServiceRef ref) =>
     UserLoginServiceImpl(
       userRepository: ref.read(userRepositoryProvider),
     );
+
+@Riverpod(keepAlive: true)
+Future<UserModel> getMe(GetMeRef ref) async {
+  final result = await ref.watch(userRepositoryProvider).me();
+
+  return switch (result) {
+    Success(value: final userModel) => userModel,
+    Failure(:final exception) => throw exception,
+  };
+}
