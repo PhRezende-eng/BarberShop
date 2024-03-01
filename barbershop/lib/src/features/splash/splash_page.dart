@@ -2,14 +2,14 @@ import 'package:barber_shop/src/core/ui/constants.dart';
 import 'package:barber_shop/src/features/auth/login/login_page.dart';
 import 'package:flutter/material.dart';
 
-class BSSplashPage extends StatefulWidget {
-  const BSSplashPage({super.key});
+class SplashPage extends StatefulWidget {
+  const SplashPage({super.key});
 
   @override
-  State<BSSplashPage> createState() => _BSSplashPageState();
+  State<SplashPage> createState() => _SplashPageState();
 }
 
-class _BSSplashPageState extends State<BSSplashPage> {
+class _SplashPageState extends State<SplashPage> {
   var _scale = 10.0;
   var _animationOpacityLogo = 0.0;
 
@@ -68,7 +68,7 @@ class _BSSplashPageState extends State<BSSplashPage> {
     Navigator.of(context).pushAndRemoveUntil(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) {
-          return const BSLoginPage();
+          return const LoginPage();
         },
         settings: const RouteSettings(name: '/auth/login'),
         transitionsBuilder: (_, animation, __, child) {

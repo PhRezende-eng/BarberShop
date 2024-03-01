@@ -4,10 +4,9 @@ import 'dart:io';
 import 'package:barber_shop/src/core/exceptions/auth_exception.dart';
 import 'package:barber_shop/src/core/exceptions/repository_exception.dart';
 import 'package:barber_shop/src/core/fp/either.dart';
-import 'package:barber_shop/src/core/fp/nil.dart';
 import 'package:barber_shop/src/core/rest_client/rest_client.dart';
 import 'package:barber_shop/src/models/user_model.dart';
-import 'package:barber_shop/src/repositories/user_repository.dart';
+import 'package:barber_shop/src/repositories/user/user_repository.dart';
 import 'package:dio/dio.dart';
 
 class UserRepositoryImpl implements UserRepository {

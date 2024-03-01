@@ -3,6 +3,7 @@ import 'package:barber_shop/src/core/exceptions/service_exception.dart';
 import 'package:barber_shop/src/core/fp/either.dart';
 import 'package:barber_shop/src/core/providers/application_providers.dart';
 import 'package:barber_shop/src/features/auth/login/login_state.dart';
+import 'package:barber_shop/src/models/user_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part "login_vm.g.dart";
@@ -20,8 +21,17 @@ class LoginVM extends _$LoginVM {
 
     switch (result) {
       case Success():
-        // buscar dados do usuário logado
-        // analisar qual o tipo de login
+        ref.invalidate(getMeProvider);
+        ref.invalidate(getMyBarbershopProvider);
+
+        final user = await ref.read(getMeProvider.future);
+        switch (user) {
+          case UserModelADM():
+            state = state.copyWith(status: () => LoginStateStatus.admLogin);
+          case UserModelEmployee():
+            state =
+                state.copyWith(status: () => LoginStateStatus.employeeLogin);
+        }
         break;
       case Failure(exception: ServiceException(:final message)):
         state = state.copyWith(

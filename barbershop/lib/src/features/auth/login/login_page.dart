@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:validatorless/validatorless.dart';
 
-class BSLoginPage extends ConsumerStatefulWidget {
-  const BSLoginPage({super.key});
+class LoginPage extends ConsumerStatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  ConsumerState<BSLoginPage> createState() => _BSLoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _BSLoginPageState extends ConsumerState<BSLoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final formKey = GlobalKey<FormState>();
   final emailEC = TextEditingController();
   final passwordEC = TextEditingController();
@@ -36,17 +36,16 @@ class _BSLoginPageState extends ConsumerState<BSLoginPage> {
         switch (next) {
           case LoginState(status: LoginStateStatus.initial):
             break;
-          case LoginState(
-              status: LoginStateStatus.error,
-              errorMessage: final errorMessage?,
-            ):
+          case LoginState(status: LoginStateStatus.error, :final errorMessage?):
             Messages.showError(errorMessage, context);
           case LoginState(status: LoginStateStatus.error):
             Messages.showError("Error ao realizar login", context);
           case LoginState(status: LoginStateStatus.admLogin):
-            break;
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('/home/adm', (route) => false);
           case LoginState(status: LoginStateStatus.employeeLogin):
-            break;
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('/home/employee', (route) => false);
 
           default:
         }
