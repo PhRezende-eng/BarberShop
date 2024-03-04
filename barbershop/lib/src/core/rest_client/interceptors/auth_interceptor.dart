@@ -9,7 +9,7 @@ class AuthInterceptor extends Interceptor {
       RequestOptions options, RequestInterceptorHandler handler) async {
     final RequestOptions(:headers, :extra) = options;
 
-    const authHeaderKey = "Authorization";
+    const authHeaderKey = LocalStorageKeys.authHeaderKey;
     headers.remove(authHeaderKey);
 
     if (extra case {'DIO_AUTH_KEY': true}) {
@@ -21,5 +21,18 @@ class AuthInterceptor extends Interceptor {
 
     handler.next(options);
     super.onRequest(options, handler);
+  }
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
+    switch (err.response?.data) {
+      case ("token_expired" || "token_invalid"):
+        final sp = await SharedPreferences.getInstance();
+        sp.remove(LocalStorageKeys.accessToken);
+      default:
+    }
+
+    handler.next(err);
+    super.onError(err, handler);
   }
 }
