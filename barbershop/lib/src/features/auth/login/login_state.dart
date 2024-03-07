@@ -16,9 +16,7 @@ class LoginState {
   LoginState({
     required this.status,
     this.errorMessage,
-  }) : assert(
-          status == LoginStateStatus.error && errorMessage == null,
-        );
+  });
 
   LoginState copyWith({
     ValueGetter<LoginStateStatus>? status,

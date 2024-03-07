@@ -21,21 +21,37 @@ class BarbershopRepositoryImpl implements BarbershopRepository {
               await restClient.auth.get('/barbershop', queryParameters: {
             'user_id': userModel.id,
           });
-          final barbershopModel = BarbershopModel.fromJson(data);
-          return Success(barbershopModel);
+          final barbershopModel = BarbershopModel.fromJson(data["data"]);
+
+          if (data['status_message'] == 'Success') {
+            return Success(barbershopModel);
+          } else {
+            final apiMessage = data["data"];
+            return Failure(
+              RepositoryException(
+                  message: apiMessage ?? "Error ao realizar login"),
+            );
+          }
         case UserModelEmployee():
           final Response(:data) =
               await restClient.auth.get('/barbershop', queryParameters: {
             'barbershop_id': userModel.barbershopId,
           });
-          final barbershopModel = BarbershopModel.fromJson(data);
+          final barbershopModel = BarbershopModel.fromJson(data["data"]);
           return Success(barbershopModel);
       }
     } on ArgumentError catch (e) {
       return Failure(RepositoryException(message: e.message));
     } on DioException catch (e) {
-      return Failure(RepositoryException(
-          message: e.response?.data ?? 'Erro ao buscar loja'));
+      if (e.response != null) {
+        final Response(:data) = e.response!;
+        final apiMessage = data["data"];
+        return Failure(
+          RepositoryException(message: apiMessage ?? "Erro ao buscar usuário"),
+        );
+      }
+      return Failure(
+          RepositoryException(message: e.message ?? 'Erro ao buscar loja'));
     }
   }
 }

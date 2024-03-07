@@ -19,8 +19,23 @@ class UserRepositoryImpl implements UserRepository {
   Future<Either<RepositoryException, UserModel>> me() async {
     try {
       final Response(:data) = await restClient.auth.get('/me');
-      return Success(UserModel.fromJson(data));
+      if (data['status_message'] == 'Success') {
+        return Success(UserModel.fromJson(data["data"]));
+      } else {
+        final apiMessage = data["data"];
+        return Failure(
+          RepositoryException(message: apiMessage ?? "Error ao realizar login"),
+        );
+      }
     } on DioException catch (e, s) {
+      if (e.response != null) {
+        final Response(:data) = e.response!;
+        final apiMessage = data["data"];
+        log(apiMessage, stackTrace: s);
+        return Failure(
+          RepositoryException(message: apiMessage ?? "Erro ao buscar usuário"),
+        );
+      }
       log("Erro ao buscar usuário", stackTrace: s);
       return Failure(
           RepositoryException(message: e.message ?? "Erro ao buscar usuário"));
@@ -42,13 +57,26 @@ class UserRepositoryImpl implements UserRepository {
         },
       );
 
-      return Success(data["access_token"]);
+      if (data['status_message'] == 'Success') {
+        return Success(data["access_token"]);
+      } else {
+        final apiMessage = data["data"];
+        return Failure(
+          AuthError(message: apiMessage ?? "Error ao realizar login"),
+        );
+      }
     } on DioException catch (e, s) {
       if (e.response != null) {
-        final Response(:statusCode) = e.response!;
+        final Response(:statusCode, :data) = e.response!;
         if (statusCode == HttpStatus.forbidden) {
           log("Login ou senha inválidos", stackTrace: s);
           return Failure(AuthUnathorizedException());
+        } else {
+          final apiMessage = data["data"];
+          log(apiMessage, stackTrace: s);
+          return Failure(
+            AuthError(message: apiMessage ?? "Error ao realizar login"),
+          );
         }
       }
       log("Error ao realizar login", stackTrace: s);

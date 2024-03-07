@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthInterceptor extends Interceptor {
-  @override
   // before make request
+  @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
     final RequestOptions(:headers, :extra) = options;
@@ -17,11 +17,11 @@ class AuthInterceptor extends Interceptor {
     if (extra case {'DIO_AUTH_KEY': true}) {
       final sp = await SharedPreferences.getInstance();
       headers.addAll({
-        authHeaderKey: 'Bearer ${sp.getString(LocalStorageKeys.accessToken)}',
+        'Authorization': 'Bearer ${sp.getString(LocalStorageKeys.accessToken)}',
       });
     }
 
-    handler.next(options);
+    // handler.next(options);
     super.onRequest(options, handler);
   }
 
@@ -36,7 +36,7 @@ class AuthInterceptor extends Interceptor {
           sp.remove(LocalStorageKeys.accessToken);
           Navigator.of(BarbershopNavGlobalKey.instance.navKey.currentContext!)
               .pushNamedAndRemoveUntil('/auth/login', (route) => false);
-        default:
+          break;
       }
 
       // if (response != null && response.statusCode == HttpStatus.forbidden) {
@@ -47,7 +47,7 @@ class AuthInterceptor extends Interceptor {
       // }
     }
 
-    handler.reject(err);
+    // handler.reject(err);
     super.onError(err, handler);
   }
 }

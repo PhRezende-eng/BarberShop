@@ -15,7 +15,6 @@ class LoginVM extends _$LoginVM {
 
   Future<void> login(String email, String password) async {
     final loaderHandler = AsyncLoaderHandler()..start();
-    //TODO: this is right (watch)?
     final loginService = ref.watch(userLoginServiceProvider);
     final result = await loginService.execute(email, password);
 

@@ -83,8 +83,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 48),
                           TextFormField(
+                            controller: emailEC,
                             onTapOutside: (_) => context.unfocus(),
                             validator: Validatorless.multiple([
                               Validatorless.required("E-mail obrigatório"),
@@ -104,8 +105,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             onTapOutside: (_) => context.unfocus(),
                             validator: Validatorless.multiple([
                               Validatorless.required("Senha obrigatória"),
-                              Validatorless.min(6,
-                                  "Senha deve conter pelo menos 6 caracteres"),
+                              Validatorless.min(5,
+                                  "Senha deve conter pelo menos 5 caracteres"),
                             ]),
                             obscureText: true,
                             controller: passwordEC,
@@ -156,7 +157,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     ],
                   ),
                 ),
-                const SliverFillRemaining(),
               ],
             ),
           ),
