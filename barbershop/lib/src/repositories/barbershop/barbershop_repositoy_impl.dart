@@ -37,8 +37,14 @@ class BarbershopRepositoryImpl implements BarbershopRepository {
               await restClient.auth.get('/barbershop', queryParameters: {
             'barbershop_id': userModel.barbershopId,
           });
-          final barbershopModel = BarbershopModel.fromJson(data["data"]);
-          return Success(barbershopModel);
+
+          if (data["status_message"] == "Success") {
+            final barbershopModel = BarbershopModel.fromJson(data["data"]);
+            return Success(barbershopModel);
+          } else {
+            final apiMessage = data["data"];
+            return Failure(RepositoryException(message: apiMessage));
+          }
       }
     } on ArgumentError catch (e) {
       return Failure(RepositoryException(message: e.message));
