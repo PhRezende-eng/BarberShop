@@ -19,6 +19,17 @@ sealed class BarberShopTheme {
           ),
         ),
         fontFamily: FontConstants.fontFamily,
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          titleTextStyle: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+            color: Colors.black,
+            fontFamily: FontConstants.fontFamily,
+          ),
+          iconTheme: IconThemeData(color: ColorsConstants.brown),
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,

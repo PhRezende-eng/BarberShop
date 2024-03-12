@@ -65,7 +65,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(32),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: CustomScrollView(
               slivers: [
                 SliverFillRemaining(
@@ -143,14 +143,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           ),
                         ],
                       ),
-                      const Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Text(
-                          'Criar conta',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushNamed('/auth/register/user');
+                            },
+                            child: const Text(
+                              'Criar conta',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                           ),
                         ),
                       ),
