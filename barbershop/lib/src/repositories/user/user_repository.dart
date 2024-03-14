@@ -7,6 +7,6 @@ import 'package:barber_shop/src/models/user_model.dart';
 abstract interface class UserRepository {
   Future<Either<AuthException, String>> login(String email, String password);
   Future<Either<RepositoryException, UserModel>> me();
-  Future<Either<RepositoryException, Nil>> registerUser(
+  Future<Either<RepositoryException, Nil>> registerAdmin(
       ({String name, String email, String password}) dataUser);
 }

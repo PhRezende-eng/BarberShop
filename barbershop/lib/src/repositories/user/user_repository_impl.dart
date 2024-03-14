@@ -47,7 +47,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Either<RepositoryException, Nil>> registerUser(
+  Future<Either<RepositoryException, Nil>> registerAdmin(
       ({String name, String password, String email}) dataUser) async {
     try {
       await restClient.unAuth.post('/users', data: {

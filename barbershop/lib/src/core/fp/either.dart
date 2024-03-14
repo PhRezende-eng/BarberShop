@@ -1,11 +1,11 @@
-sealed class Either<E extends Exception, Object> {}
+sealed class Either<E extends Exception, S> {}
 
-class Failure<E extends Exception, Object> extends Either<E, Object> {
+class Failure<E extends Exception, S> extends Either<E, S> {
   final E exception;
   Failure(this.exception);
 }
 
-class Success<E extends Exception, Object> extends Either<E, Object> {
-  final Object value;
+class Success<E extends Exception, S> extends Either<E, S> {
+  final S value;
   Success(this.value);
 }
