@@ -50,7 +50,7 @@ class UserRepositoryImpl implements UserRepository {
   Future<Either<RepositoryException, Nil>> registerAdmin(
       ({String name, String password, String email}) dataUser) async {
     try {
-      await restClient.unAuth.post('/users', data: {
+      await restClient.unAuth.post('/create_user', data: {
         'name': dataUser.name,
         'password': dataUser.password,
         'email': dataUser.email,
