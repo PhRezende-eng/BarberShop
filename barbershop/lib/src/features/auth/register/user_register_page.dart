@@ -46,11 +46,14 @@ class _UserRegisterPageState extends ConsumerState<UserRegisterPage> {
     ref.listen(userRegisterVmProvider, (_, state) {
       switch (state.status) {
         case UserRegisterStateStatus.initial:
-          log('message');
+          log('Set initial state for user register');
         case UserRegisterStateStatus.error:
           Messages.showError(state.errorMessage!, context);
         case UserRegisterStateStatus.success:
-          Navigator.pushNamed(context, '/auth/register/barbershop');
+          //await loader ends
+          Future.delayed(const Duration(microseconds: 1), () {
+            Navigator.of(context).pushNamed('/auth/register/barbershop');
+          });
       }
     });
 

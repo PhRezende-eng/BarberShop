@@ -14,10 +14,10 @@ class UserRegisterVm extends _$UserRegisterVm {
 
   Future<void> registerUser(
       ({String email, String password, String name}) userData) async {
-    final loaderHandler = AsyncLoaderHandler()..start();
     final userRegisterService = ref.watch(userRegisterAdmServiceProvider);
 
-    final resultRegister = await userRegisterService.execute(userData);
+    final resultRegister =
+        await userRegisterService.execute(userData).asyncLoader();
 
     switch (resultRegister) {
       case Success():
@@ -28,7 +28,5 @@ class UserRegisterVm extends _$UserRegisterVm {
             status: () => UserRegisterStateStatus.error,
             errorMessage: () => exception.message);
     }
-
-    loaderHandler.close();
   }
 }
