@@ -50,7 +50,7 @@ class _UserRegisterPageState extends ConsumerState<UserRegisterPage> {
         case UserRegisterStateStatus.error:
           Messages.showError(state.errorMessage!, context);
         case UserRegisterStateStatus.success:
-          log('message');
+          Navigator.pushNamed(context, '/auth/register/barbershop');
       }
     });
 

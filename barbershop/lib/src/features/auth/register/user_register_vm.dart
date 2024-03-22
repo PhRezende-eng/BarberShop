@@ -1,5 +1,6 @@
 import 'package:asyncstate/asyncstate.dart';
 import 'package:barber_shop/src/core/fp/either.dart';
+import 'package:barber_shop/src/core/providers/application_providers.dart';
 import 'package:barber_shop/src/features/auth/register/user_register_providers.dart';
 import 'package:barber_shop/src/features/auth/register/user_register_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -20,6 +21,7 @@ class UserRegisterVm extends _$UserRegisterVm {
 
     switch (resultRegister) {
       case Success():
+        ref.invalidate(getMeProvider);
         state = state.copyWith(status: () => UserRegisterStateStatus.success);
       case Failure(:final exception):
         state = state.copyWith(
