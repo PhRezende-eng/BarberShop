@@ -31,7 +31,6 @@ class LoginVM extends _$LoginVM {
             state =
                 state.copyWith(status: () => LoginStateStatus.employeeLogin);
         }
-        break;
       case Failure(exception: ServiceException(:final message)):
         state = state.copyWith(
           status: () => LoginStateStatus.error,

@@ -1,34 +1,59 @@
+import 'dart:developer';
+
 import 'package:barber_shop/src/core/ui/helpers/form_helper.dart';
 import 'package:barber_shop/src/core/ui/helpers/messages.dart';
+import 'package:barber_shop/src/features/auth/register/user_register_state.dart';
+import 'package:barber_shop/src/features/auth/register/user_register_vm.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:validatorless/validatorless.dart';
 
-class UserRegisterPage extends StatefulWidget {
+class UserRegisterPage extends ConsumerStatefulWidget {
   const UserRegisterPage({super.key});
 
   @override
-  State<UserRegisterPage> createState() => _UserRegisterPageState();
+  ConsumerState<UserRegisterPage> createState() => _UserRegisterPageState();
 }
 
-class _UserRegisterPageState extends State<UserRegisterPage> {
-  final formKey = GlobalKey<FormState>();
+class _UserRegisterPageState extends ConsumerState<UserRegisterPage> {
+  late GlobalKey<FormState> formKey;
 
-  final nameEC = TextEditingController();
-  final emailEC = TextEditingController();
-  final passwordEC = TextEditingController();
-  final repeatPassEC = TextEditingController();
+  late TextEditingController nameEC;
+  late TextEditingController emailEC;
+  late TextEditingController passwordEC;
+
+  @override
+  void initState() {
+    formKey = GlobalKey<FormState>();
+    nameEC = TextEditingController();
+    emailEC = TextEditingController();
+    passwordEC = TextEditingController();
+    super.initState();
+  }
 
   @override
   void dispose() {
     nameEC.dispose();
     emailEC.dispose();
     passwordEC.dispose();
-    repeatPassEC.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final userRegisterVm = ref.watch(userRegisterVmProvider.notifier);
+
+    ref.listen(userRegisterVmProvider, (_, state) {
+      switch (state.status) {
+        case UserRegisterStateStatus.initial:
+          log('message');
+        case UserRegisterStateStatus.error:
+          Messages.showError(state.errorMessage!, context);
+        case UserRegisterStateStatus.success:
+          log('message');
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Criar conta'),
@@ -60,7 +85,7 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
                   onTapOutside: (_) => context.unfocus(),
                   validator: Validatorless.multiple([
                     Validatorless.required('O email é obrigatório'),
-                    Validatorless.email('Digite um emial válido'),
+                    Validatorless.email('Digite um email válido'),
                   ]),
                   decoration: const InputDecoration(
                     floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -95,7 +120,6 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
                     const SizedBox(width: 16),
                     Flexible(
                       child: TextFormField(
-                        controller: repeatPassEC,
                         onTapOutside: (_) => context.unfocus(),
                         validator: Validatorless.multiple([
                           Validatorless.required('A senha é obrigatória'),
@@ -120,7 +144,11 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
                   onPressed: () {
                     switch (formKey.currentState?.validate()) {
                       case true:
-                        print('sadf asdfasdf asdf');
+                        userRegisterVm.registerUser((
+                          email: emailEC.text,
+                          name: nameEC.text,
+                          password: passwordEC.text,
+                        ));
                       default:
                         Messages.showError("Campos inválidos", context);
                     }
