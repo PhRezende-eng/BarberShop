@@ -63,7 +63,6 @@ class _UserRegisterPageState extends ConsumerState<UserRegisterPage> {
         child: SingleChildScrollView(
           child: Form(
             key: formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               children: [
                 const SizedBox(height: 16),
