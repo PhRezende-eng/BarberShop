@@ -120,11 +120,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          const Text(
-                            'Esqueceu a senha?',
-                            style: TextStyle(
-                                color: ColorsConstants.brown, fontSize: 12),
-                            textAlign: TextAlign.left,
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Esqueceu a senha?',
+                              style: TextStyle(
+                                  color: ColorsConstants.brown, fontSize: 16),
+                            ),
                           ),
                           const SizedBox(height: 24),
                           ElevatedButton(
@@ -149,8 +151,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           alignment: Alignment.bottomCenter,
                           child: InkWell(
                             onTap: () {
+                              //TODO: USER
                               Navigator.of(context)
-                                  .pushNamed('/auth/register/user');
+                                  .pushNamed('/auth/register/barbershop');
                             },
                             child: const Text(
                               'Criar conta',
