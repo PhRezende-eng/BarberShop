@@ -1,19 +1,53 @@
 import 'package:barber_shop/src/core/ui/constants.dart';
+import 'package:barber_shop/src/core/ui/helpers/form_helper.dart';
+import 'package:barber_shop/src/core/ui/helpers/messages.dart';
+import 'package:barber_shop/src/features/auth/register/barbershop/barbershop_register_state.dart';
+import 'package:barber_shop/src/features/auth/register/barbershop/barbershop_register_vm.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:validatorless/validatorless.dart';
 
-class BarbershopRegisterPage extends StatefulWidget {
+class BarbershopRegisterPage extends ConsumerStatefulWidget {
   const BarbershopRegisterPage({super.key});
 
   @override
-  State<BarbershopRegisterPage> createState() => _BarbershopRegisterPageState();
+  ConsumerState<BarbershopRegisterPage> createState() =>
+      _BarbershopRegisterPageState();
 }
 
-class _BarbershopRegisterPageState extends State<BarbershopRegisterPage> {
-  String? selectHour;
-  String? selectDay;
+class _BarbershopRegisterPageState
+    extends ConsumerState<BarbershopRegisterPage> {
+  late Map<String, String?> selectedDays;
+  late Map<String, String?> selectedHours;
+  late TextEditingController nameEC;
+  late TextEditingController emailEC;
+  late GlobalKey<FormState> formKey;
+
+  @override
+  void initState() {
+    formKey = GlobalKey<FormState>();
+    nameEC = TextEditingController();
+    emailEC = TextEditingController();
+    selectedDays = {};
+    selectedHours = {};
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final registerVM = ref.watch(barbershopRegisterVMProvider.notifier);
+
+    ref.listen(barbershopRegisterVMProvider, (_, state) {
+      switch (state.status) {
+        case (BarbershopRegisterStatus.initial):
+        //TODO
+        case (BarbershopRegisterStatus.error):
+        //TODO
+        case (BarbershopRegisterStatus.success):
+        //TODO
+      }
+    });
+
     const hours = [
       "Seg",
       "Ter",
@@ -44,108 +78,99 @@ class _BarbershopRegisterPageState extends State<BarbershopRegisterPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cadastrar estabelecimento'),
+        title: const Text('Cadastrar estabelecimento'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  TextFormField(),
-                  SizedBox(height: 16),
-                  TextFormField(),
-                  SizedBox(height: 16),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Selecione os dias da semana',
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: nameEC,
+                      onTapOutside: (_) => context.unfocus(),
+                      validator: Validatorless.required('O nome é obrigatório'),
+                      decoration: const InputDecoration(
+                        label: Text('Nome'),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: hours
-                        .map((hour) => GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectHour = hour;
-                                });
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: selectHour != hour
-                                        ? ColorsConstants.brown
-                                        : Colors.white,
-                                  ),
-                                  color: selectHour == hour
-                                      ? ColorsConstants.brown
-                                      : Colors.white,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                padding: EdgeInsets.all(8),
-                                child: Text(
-                                  hour,
-                                  style: TextStyle(
-                                      color: selectHour != hour
-                                          ? ColorsConstants.brown
-                                          : Colors.white),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ))
-                        .toList(),
-                  ),
-                  SizedBox(height: 16),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Selecione os horários de atendimento',
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      validator: Validatorless.multiple([
+                        Validatorless.required('O email é obrigatório'),
+                        Validatorless.email('Digite um email válido'),
+                      ]),
+                      onTapOutside: (_) => context.unfocus(),
+                      controller: emailEC,
+                      decoration: const InputDecoration(
+                        label: Text('Email'),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 8),
-                ],
+                    const SizedBox(height: 16),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Selecione os dias da semana',
+                        style: TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: hours
+                          .map((hour) => BarberShopScheduleCard(
+                                onTap: () {
+                                  if (selectedHours[hour] == null) {
+                                    selectedHours[hour] = hour;
+                                  } else {
+                                    selectedHours[hour] = null;
+                                  }
+                                  setState(() {});
+                                },
+                                schedule: hour,
+                                selected: selectedHours[hour] == hour,
+                              ))
+                          .toList(),
+                    ),
+                    const SizedBox(height: 16),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Selecione os horários de atendimento',
+                        style: TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                ),
               ),
             ),
             SliverGrid.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: (days.length / 3).toInt(),
-                mainAxisSpacing: 0,
-                crossAxisSpacing: 0,
+                crossAxisCount: days.length ~/ 3,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 24,
               ),
-              itemBuilder: (context, index) => GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectDay = days[index];
-                  });
-                },
-                child: Container(
-                  margin: EdgeInsets.all(8),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: selectDay != days[index]
-                          ? ColorsConstants.brown
-                          : Colors.white,
-                    ),
-                    color: selectDay == days[index]
-                        ? ColorsConstants.brown
-                        : Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  padding: EdgeInsets.all(8),
-                  child: Text(
-                    days[index],
-                    style: TextStyle(
-                        color: selectDay != days[index]
-                            ? ColorsConstants.brown
-                            : Colors.white),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
+              itemBuilder: (context, index) {
+                final day = days[index];
+                return BarberShopScheduleCard(
+                  onTap: () {
+                    if (selectedDays[day] == null) {
+                      selectedDays[day] = day;
+                    } else {
+                      selectedDays[day] = null;
+                    }
+                    setState(() {});
+                  },
+                  schedule: day,
+                  selected: selectedDays[day] == day,
+                );
+              },
               itemCount: days.length,
             ),
             SliverFillRemaining(
@@ -156,14 +181,60 @@ class _BarbershopRegisterPageState extends State<BarbershopRegisterPage> {
                   padding: const EdgeInsets.only(top: 16),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        minimumSize: Size.fromHeight(56)),
-                    onPressed: () {},
-                    child: Text('Cadastrar estabelecimento'),
+                        minimumSize: const Size.fromHeight(56)),
+                    onPressed: () {
+                      switch (formKey.currentState?.validate()) {
+                        case (true):
+                          registerVM.createBarbershop((
+                            name: nameEC.text,
+                            email: emailEC.text,
+                          ));
+                        default:
+                          Messages.showError(
+                              "Formulário da barbearia inválido", context);
+                      }
+                    },
+                    child: const Text('Cadastrar estabelecimento'),
                   ),
                 ),
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class BarberShopScheduleCard extends StatelessWidget {
+  final String schedule;
+  final bool selected;
+  final VoidCallback onTap;
+  const BarberShopScheduleCard({
+    required this.schedule,
+    required this.selected,
+    required this.onTap,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          border: Border.all(
+              color: !selected ? ColorsConstants.brown : Colors.white),
+          color: selected ? ColorsConstants.brown : Colors.white,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+        child: Text(
+          schedule,
+          style: TextStyle(
+              color: !selected ? ColorsConstants.brown : Colors.white),
+          textAlign: TextAlign.center,
         ),
       ),
     );
