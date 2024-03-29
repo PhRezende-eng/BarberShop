@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:barber_shop/src/core/ui/helpers/form_helper.dart';
 import 'package:barber_shop/src/core/ui/helpers/messages.dart';
-import 'package:barber_shop/src/features/register/user/user_register_state.dart';
-import 'package:barber_shop/src/features/register/user/user_register_vm.dart';
+import 'package:barber_shop/src/features/auth/register/user/user_register_state.dart';
+import 'package:barber_shop/src/features/auth/register/user/user_register_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:validatorless/validatorless.dart';
