@@ -19,6 +19,7 @@ samples, guidance on mobile development, and a full API reference.
 ## To run build_runner:
 ```
 $dart run build_runner watch -d
+$dart run build_runner build -d
 ```
 
 ## To run server:
