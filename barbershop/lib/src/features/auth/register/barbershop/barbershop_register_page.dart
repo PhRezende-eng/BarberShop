@@ -1,6 +1,6 @@
-import 'package:barber_shop/src/core/ui/constants.dart';
 import 'package:barber_shop/src/core/ui/helpers/form_helper.dart';
 import 'package:barber_shop/src/core/ui/helpers/messages.dart';
+import 'package:barber_shop/src/core/ui/widgets/schedule_card.dart';
 import 'package:barber_shop/src/features/auth/register/barbershop/barbershop_register_state.dart';
 import 'package:barber_shop/src/features/auth/register/barbershop/barbershop_register_vm.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +31,13 @@ class _BarbershopRegisterPageState
     selectedDays = {};
     selectedHours = {};
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    nameEC.dispose();
+    emailEC.dispose();
+    super.dispose();
   }
 
   @override
@@ -188,6 +195,12 @@ class _BarbershopRegisterPageState
                           registerVM.createBarbershop((
                             name: nameEC.text,
                             email: emailEC.text,
+                            weekDays: selectedDays.values
+                                .where((day) => day != null)
+                                .toList(),
+                            hours: selectedHours.values
+                                .where((hour) => hour != null)
+                                .toList(),
                           ));
                         default:
                           Messages.showError(
@@ -200,41 +213,6 @@ class _BarbershopRegisterPageState
               ),
             )
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class BarberShopScheduleCard extends StatelessWidget {
-  final String schedule;
-  final bool selected;
-  final VoidCallback onTap;
-  const BarberShopScheduleCard({
-    required this.schedule,
-    required this.selected,
-    required this.onTap,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          border: Border.all(
-              color: !selected ? ColorsConstants.brown : Colors.white),
-          color: selected ? ColorsConstants.brown : Colors.white,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-        child: Text(
-          schedule,
-          style: TextStyle(
-              color: !selected ? ColorsConstants.brown : Colors.white),
-          textAlign: TextAlign.center,
         ),
       ),
     );

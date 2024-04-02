@@ -9,7 +9,13 @@ class BarbershopRegisterVM extends _$BarbershopRegisterVM {
   BarbershopRegisterState build() => BarbershopRegisterState.initial();
 
   Future<void> createBarbershop(
-      ({String name, String email}) barbershopData) async {
-    print('Send request');
+      ({
+        String name,
+        String email,
+        List<String?> weekDays,
+        List<String?> hours,
+      }) barbershopData) async {
+    print(barbershopData.weekDays);
+    print(barbershopData.hours);
   }
 }
