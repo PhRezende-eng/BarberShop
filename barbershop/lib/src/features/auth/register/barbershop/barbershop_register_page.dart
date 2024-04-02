@@ -1,6 +1,7 @@
 import 'package:barber_shop/src/core/ui/helpers/form_helper.dart';
 import 'package:barber_shop/src/core/ui/helpers/messages.dart';
 import 'package:barber_shop/src/core/ui/widgets/schedule_card.dart';
+import 'package:barber_shop/src/core/ui/widgets/weekdays_panel.dart';
 import 'package:barber_shop/src/features/auth/register/barbershop/barbershop_register_state.dart';
 import 'package:barber_shop/src/features/auth/register/barbershop/barbershop_register_vm.dart';
 import 'package:flutter/material.dart';
@@ -56,16 +57,6 @@ class _BarbershopRegisterPageState
     });
 
     const hours = [
-      "Seg",
-      "Ter",
-      "Qua",
-      "Qui",
-      "Sex",
-      "Sáb",
-      "Dom",
-    ];
-
-    const days = [
       "08:00",
       "09:00",
       "10:00",
@@ -118,74 +109,59 @@ class _BarbershopRegisterPageState
                         floatingLabelBehavior: FloatingLabelBehavior.never,
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Selecione os dias da semana',
-                        style: TextStyle(fontWeight: FontWeight.w700),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: hours
-                          .map((hour) => BarberShopScheduleCard(
-                                onTap: () {
-                                  if (selectedHours[hour] == null) {
-                                    selectedHours[hour] = hour;
-                                  } else {
-                                    selectedHours[hour] = null;
-                                  }
-                                  setState(() {});
-                                },
-                                schedule: hour,
-                                selected: selectedHours[hour] == hour,
-                              ))
-                          .toList(),
-                    ),
-                    const SizedBox(height: 16),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Selecione os horários de atendimento',
-                        style: TextStyle(fontWeight: FontWeight.w700),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
                   ],
                 ),
               ),
             ),
+            SliverToBoxAdapter(
+              child: WeekdaysPanel(
+                selectedDays: selectedDays,
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  SizedBox(height: 16),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Selecione os horários de atendimento',
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                ],
+              ),
+            ),
             SliverGrid.builder(
+              itemCount: hours.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: days.length ~/ 3,
+                crossAxisCount: hours.length ~/ 3,
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 24,
               ),
               itemBuilder: (context, index) {
-                final day = days[index];
-                return BarberShopScheduleCard(
+                final day = hours[index];
+                return BarbershopScheduleButton(
                   onTap: () {
-                    if (selectedDays[day] == null) {
-                      selectedDays[day] = day;
+                    if (selectedHours[day] == null) {
+                      selectedHours[day] = day;
                     } else {
-                      selectedDays[day] = null;
+                      selectedHours[day] = null;
                     }
                     setState(() {});
                   },
                   schedule: day,
-                  selected: selectedDays[day] == day,
+                  selected: selectedHours[day] == day,
                 );
               },
-              itemCount: days.length,
             ),
             SliverFillRemaining(
               hasScrollBody: false,
               child: Align(
                 alignment: Alignment.topCenter,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 16),
+                  padding: const EdgeInsets.only(top: 24),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(56)),

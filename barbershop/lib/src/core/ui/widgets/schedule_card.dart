@@ -1,11 +1,11 @@
 import 'package:barber_shop/src/core/ui/constants.dart';
 import 'package:flutter/material.dart';
 
-class BarberShopScheduleCard extends StatelessWidget {
+class BarbershopScheduleButton extends StatelessWidget {
   final String schedule;
   final bool selected;
   final VoidCallback onTap;
-  const BarberShopScheduleCard({
+  const BarbershopScheduleButton({
     required this.schedule,
     required this.selected,
     required this.onTap,
