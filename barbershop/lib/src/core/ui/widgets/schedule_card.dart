@@ -1,21 +1,32 @@
 import 'package:barber_shop/src/core/ui/constants.dart';
 import 'package:flutter/material.dart';
 
-class BarbershopScheduleButton extends StatelessWidget {
-  final String schedule;
-  final bool selected;
+class BarbershopScheduleButton extends StatefulWidget {
+  final String label;
   final VoidCallback onTap;
   const BarbershopScheduleButton({
-    required this.schedule,
-    required this.selected,
+    required this.label,
     required this.onTap,
     super.key,
   });
 
   @override
+  State<BarbershopScheduleButton> createState() =>
+      _BarbershopScheduleButtonState();
+}
+
+class _BarbershopScheduleButtonState extends State<BarbershopScheduleButton> {
+  bool selected = false;
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        widget.onTap();
+        setState(() {
+          selected = !selected;
+        });
+      },
       behavior: HitTestBehavior.opaque,
       child: Container(
         alignment: Alignment.center,
@@ -27,7 +38,7 @@ class BarbershopScheduleButton extends StatelessWidget {
         ),
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
         child: Text(
-          schedule,
+          widget.label,
           style: TextStyle(
               color: !selected ? ColorsConstants.brown : Colors.white),
           textAlign: TextAlign.center,

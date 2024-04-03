@@ -38,21 +38,21 @@ class _WeekdaysPanelState extends State<WeekdaysPanel> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: days
-                .map((day) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: BarbershopScheduleButton(
-                        onTap: () {
-                          if (widget.selectedDays[day] == null) {
-                            widget.selectedDays[day] = day;
-                          } else {
-                            widget.selectedDays[day] = null;
-                          }
-                          setState(() {});
-                        },
-                        schedule: day,
-                        selected: widget.selectedDays[day] == day,
-                      ),
-                    ))
+                .map(
+                  (day) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: BarbershopScheduleButton(
+                      label: day,
+                      onTap: () {
+                        if (widget.selectedDays[day] == null) {
+                          widget.selectedDays[day] = day;
+                        } else {
+                          widget.selectedDays[day] = null;
+                        }
+                      },
+                    ),
+                  ),
+                )
                 .toList(),
           ),
         ),

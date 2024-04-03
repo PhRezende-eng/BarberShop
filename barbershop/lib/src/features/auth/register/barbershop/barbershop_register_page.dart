@@ -149,16 +149,14 @@ class _BarbershopRegisterPageState
                 final value = index + 1;
                 final hour = hours[index];
                 return BarbershopScheduleButton(
+                  label: hour,
                   onTap: () {
                     if (selectedHours[hour] == null) {
                       selectedHours[hour] = value;
                     } else {
                       selectedHours[hour] = null;
                     }
-                    setState(() {});
                   },
-                  schedule: hour,
-                  selected: selectedHours[hour] == value,
                 );
               },
             ),

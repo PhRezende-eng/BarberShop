@@ -49,16 +49,14 @@ class _HoursPanelState extends State<HoursPanel> {
           final value = index + 1;
           final hour = hours[index];
           return BarbershopScheduleButton(
+            label: hour,
             onTap: () {
               if (widget.selectedHours[hour] == null) {
                 widget.selectedHours[hour] = value;
               } else {
                 widget.selectedHours[hour] = null;
               }
-              setState(() {});
             },
-            schedule: hour,
-            selected: widget.selectedHours[hour] == value,
           );
         },
         itemCount: hours.length,
