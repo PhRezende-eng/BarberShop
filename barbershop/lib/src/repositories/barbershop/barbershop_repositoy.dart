@@ -11,6 +11,6 @@ abstract interface class BarbershopRepository {
         String name,
         String email,
         List<String> weekDays,
-        List<String> hours
+        List<int> hours
       }) barbershopData);
 }

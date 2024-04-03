@@ -8,6 +8,6 @@ abstract interface class BarbershopRegisterService {
         String name,
         String email,
         List<String> weekDays,
-        List<String> hours,
+        List<int> hours,
       }) barbershopData);
 }

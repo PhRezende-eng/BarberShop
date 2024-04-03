@@ -2,7 +2,7 @@ import 'package:barber_shop/src/core/ui/widgets/schedule_card.dart';
 import 'package:flutter/material.dart';
 
 class HoursPanel extends StatefulWidget {
-  final Map<String, String?> selectedHours;
+  final Map<String, int?> selectedHours;
   const HoursPanel({required this.selectedHours, super.key});
 
   @override
@@ -46,18 +46,19 @@ class _HoursPanelState extends State<HoursPanel> {
           crossAxisSpacing: 24,
         ),
         itemBuilder: (context, index) {
+          final value = index + 1;
           final hour = hours[index];
           return BarbershopScheduleButton(
             onTap: () {
               if (widget.selectedHours[hour] == null) {
-                widget.selectedHours[hour] = hour;
+                widget.selectedHours[hour] = value;
               } else {
                 widget.selectedHours[hour] = null;
               }
               setState(() {});
             },
             schedule: hour,
-            selected: widget.selectedHours[hour] == hour,
+            selected: widget.selectedHours[hour] == value,
           );
         },
         itemCount: hours.length,

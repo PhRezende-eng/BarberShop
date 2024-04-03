@@ -19,23 +19,34 @@ class BarbershopRepositoryImpl implements BarbershopRepository {
         String name,
         String email,
         List<String> weekDays,
-        List<String> hours,
+        List<int> hours,
       }) barbershopData) async {
     try {
       final Response(data: Map<String, dynamic> apiResponse) =
-          await restClient.auth.post('/create_barbershop', data: {
-        'name': barbershopData.name,
-        'email': barbershopData.email,
-        'weekDays': barbershopData.weekDays,
-        'hours': barbershopData.hours,
-      });
+          await restClient.auth.post(
+        '/barbershop',
+        //TODO: remove below line
+        queryParameters: {'barbershop_id': '5'},
+        //
+        data: {
+          'name': barbershopData.name,
+          'email': barbershopData.email,
+          'opening_days': barbershopData.weekDays,
+          'opening_hours': barbershopData.hours,
+        },
+      );
 
       final response = ApiResponseModel.fromJson(apiResponse);
 
       if (response.statusMessage == 'Success') {
-        final barbershopModel =
-            BarbershopModel.fromJson(response.data as Map<String, dynamic>);
+        //TODO: remove below clause
+        final barbershopModel = BarbershopModel.fromJson(
+            (response.data as List).first as Map<String, dynamic>);
         return Success(barbershopModel);
+
+        // final barbershopModel =
+        //     BarbershopModel.fromJson(response.data as Map<String, dynamic>);
+        // return Success(barbershopModel);
       } else {
         final apiMessage = response.data as String?;
         return Failure(
@@ -56,6 +67,8 @@ class BarbershopRepositoryImpl implements BarbershopRepository {
       }
       return Failure(
           RepositoryException(message: e.message ?? 'Erro ao buscar loja'));
+    } catch (e) {
+      return Failure(RepositoryException(message: e.toString()));
     }
   }
 
@@ -106,6 +119,8 @@ class BarbershopRepositoryImpl implements BarbershopRepository {
       }
       return Failure(
           RepositoryException(message: e.message ?? 'Erro ao buscar loja'));
+    } catch (e) {
+      return Failure(RepositoryException(message: e.toString()));
     }
   }
 }

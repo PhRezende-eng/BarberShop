@@ -19,7 +19,7 @@ class BarbershopRegisterPage extends ConsumerStatefulWidget {
 class _BarbershopRegisterPageState
     extends ConsumerState<BarbershopRegisterPage> {
   late Map<String, String?> selectedDays;
-  late Map<String, String?> selectedHours;
+  late Map<String, int?> selectedHours;
   late TextEditingController nameEC;
   late TextEditingController emailEC;
   late GlobalKey<FormState> formKey;
@@ -48,11 +48,16 @@ class _BarbershopRegisterPageState
     ref.listen(barbershopRegisterVMProvider, (_, state) {
       switch (state.status) {
         case (BarbershopRegisterStatus.initial):
-        //TODO
+          print('Initial');
         case (BarbershopRegisterStatus.error):
-        //TODO
+          Messages.showError(
+            state.errorMessage ??
+                "Error ao processar cadastro de estabelecimento",
+            context,
+          );
+
         case (BarbershopRegisterStatus.success):
-        //TODO
+          print('success');
       }
     });
 
@@ -79,7 +84,7 @@ class _BarbershopRegisterPageState
         title: const Text('Cadastrar estabelecimento'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
@@ -141,18 +146,19 @@ class _BarbershopRegisterPageState
                 crossAxisSpacing: 24,
               ),
               itemBuilder: (context, index) {
-                final day = hours[index];
+                final value = index + 1;
+                final hour = hours[index];
                 return BarbershopScheduleButton(
                   onTap: () {
-                    if (selectedHours[day] == null) {
-                      selectedHours[day] = day;
+                    if (selectedHours[hour] == null) {
+                      selectedHours[hour] = value;
                     } else {
-                      selectedHours[day] = null;
+                      selectedHours[hour] = null;
                     }
                     setState(() {});
                   },
-                  schedule: day,
-                  selected: selectedHours[day] == day,
+                  schedule: hour,
+                  selected: selectedHours[hour] == value,
                 );
               },
             ),
@@ -171,12 +177,8 @@ class _BarbershopRegisterPageState
                           registerVM.createBarbershop((
                             name: nameEC.text,
                             email: emailEC.text,
-                            weekDays: selectedDays.values
-                                .where((day) => day != null)
-                                .toList(),
-                            hours: selectedHours.values
-                                .where((hour) => hour != null)
-                                .toList(),
+                            weekDays: selectedDays.values,
+                            hours: selectedHours.values,
                           ));
                         default:
                           Messages.showError(

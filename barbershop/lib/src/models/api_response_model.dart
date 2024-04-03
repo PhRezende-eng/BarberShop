@@ -1,39 +1,36 @@
 class ApiResponseModel {
-  final Object? data;
+  final Object data;
   final int statusCode;
   final String statusMessage;
   final String? accessToken;
   final String? refreshToken;
-  final String type;
+  final String? type;
 
   ApiResponseModel({
-    this.data,
-    this.accessToken,
-    this.refreshToken,
+    required this.data,
     required this.statusCode,
     required this.statusMessage,
-    required this.type,
+    this.accessToken,
+    this.refreshToken,
+    this.type,
   });
 
-  factory ApiResponseModel.fromJson(Object json) {
+  factory ApiResponseModel.fromJson(Map<String, dynamic> json) {
     return switch (json) {
       {
-        'data': final Object? data,
+        'data': final Object data,
         'status_code': final int statusCode,
         'status_message': final String statusMessage,
-        'access_token': final String? accessToken,
-        'refresh_token': final String? refreshToken,
-        'type': final String type,
       } =>
         ApiResponseModel(
           data: data,
           statusCode: statusCode,
           statusMessage: statusMessage,
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-          type: type,
+          accessToken: json["access_token"],
+          refreshToken: json["refresh_token"],
+          type: json["type"],
         ),
-      _ => throw ArgumentError('Invalid Json'),
+      _ => throw ArgumentError('Invalid ApiResponseModel Json'),
     };
   }
 }

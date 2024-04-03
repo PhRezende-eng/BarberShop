@@ -43,6 +43,8 @@ class UserRepositoryImpl implements UserRepository {
     } on ArgumentError catch (e, s) {
       log("Invalid json", stackTrace: s);
       return Failure(RepositoryException(message: e.message));
+    } catch (e) {
+      return Failure(RepositoryException(message: e.toString()));
     }
   }
 
@@ -70,6 +72,8 @@ class UserRepositoryImpl implements UserRepository {
       log("Error ao cadastrar usuário", stackTrace: s);
       return Failure(RepositoryException(
           message: e.message ?? "Error ao cadastrar usuário"));
+    } catch (e) {
+      return Failure(RepositoryException(message: e.toString()));
     }
   }
 
@@ -111,6 +115,8 @@ class UserRepositoryImpl implements UserRepository {
       return Failure(
         AuthError(message: e.message ?? "Error ao realizar login"),
       );
+    } catch (e) {
+      return Failure(AuthError(message: e.toString()));
     }
   }
 }
