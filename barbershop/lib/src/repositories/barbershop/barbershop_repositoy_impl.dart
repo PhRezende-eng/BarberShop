@@ -43,7 +43,6 @@ class BarbershopRepositoryImpl implements BarbershopRepository {
         final barbershopModel = BarbershopModel.fromJson(
             (response.data as List).first as Map<String, dynamic>);
         return Success(barbershopModel);
-
         // final barbershopModel =
         //     BarbershopModel.fromJson(response.data as Map<String, dynamic>);
         // return Success(barbershopModel);

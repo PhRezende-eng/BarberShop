@@ -151,7 +151,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           alignment: Alignment.bottomCenter,
                           child: InkWell(
                             onTap: () {
-                              //TODO: USER
+                              //TODO: /auth/register/user
                               Navigator.of(context)
                                   .pushNamed('/auth/register/barbershop');
                             },

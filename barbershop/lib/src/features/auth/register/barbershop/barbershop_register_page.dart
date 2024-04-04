@@ -44,16 +44,16 @@ class _BarbershopRegisterPageState
     ref.listen(barbershopRegisterVMProvider, (_, state) {
       switch (state.status) {
         case (BarbershopRegisterStatus.initial):
-          print('Initial');
+          break;
         case (BarbershopRegisterStatus.error):
           Messages.showError(
             state.errorMessage ??
                 "Error ao processar cadastro de estabelecimento",
             context,
           );
-
         case (BarbershopRegisterStatus.success):
-          print('success');
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil('/home/adm', (route) => false);
       }
     });
 

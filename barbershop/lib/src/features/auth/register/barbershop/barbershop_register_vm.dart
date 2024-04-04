@@ -1,6 +1,7 @@
 import 'package:asyncstate/asyncstate.dart';
 import 'package:barber_shop/src/core/exceptions/service_exception.dart';
 import 'package:barber_shop/src/core/fp/either.dart';
+import 'package:barber_shop/src/core/providers/application_providers.dart';
 import 'package:barber_shop/src/features/auth/register/barbershop/barbershop_register_providers.dart';
 import 'package:barber_shop/src/features/auth/register/barbershop/barbershop_register_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -92,11 +93,13 @@ class BarbershopRegisterVM extends _$BarbershopRegisterVM {
 
     switch (response) {
       case Success():
+        ref.invalidate(getMyBarbershopProvider);
         state = state.copyWith(status: () => BarbershopRegisterStatus.success);
       case Failure(exception: ServiceException(message: final message)):
         state = state.copyWith(
-            status: () => BarbershopRegisterStatus.error,
-            errorMessage: () => message);
+          status: () => BarbershopRegisterStatus.error,
+          errorMessage: () => message,
+        );
     }
   }
 }
