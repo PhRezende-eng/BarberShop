@@ -1,15 +1,12 @@
 import 'package:barber_shop/src/core/ui/widgets/schedule_card.dart';
 import 'package:flutter/material.dart';
 
-class HoursPanel extends StatefulWidget {
+class HoursPanel extends StatelessWidget {
+  final void Function(String) onChangeValue;
   final Map<String, int?> selectedHours;
-  const HoursPanel({required this.selectedHours, super.key});
+  const HoursPanel(
+      {required this.selectedHours, required this.onChangeValue, super.key});
 
-  @override
-  State<HoursPanel> createState() => _HoursPanelState();
-}
-
-class _HoursPanelState extends State<HoursPanel> {
   @override
   Widget build(BuildContext context) {
     const hours = [
@@ -31,6 +28,7 @@ class _HoursPanelState extends State<HoursPanel> {
     ];
 
     return Column(children: [
+      const SizedBox(height: 16),
       const Align(
         alignment: Alignment.centerLeft,
         child: Text(
@@ -40,26 +38,19 @@ class _HoursPanelState extends State<HoursPanel> {
       ),
       const SizedBox(height: 8),
       GridView.builder(
+        itemCount: hours.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: hours.length ~/ 3,
           mainAxisSpacing: 12,
           crossAxisSpacing: 24,
         ),
         itemBuilder: (context, index) {
-          final value = index + 1;
           final hour = hours[index];
           return BarbershopScheduleButton(
             label: hour,
-            onTap: () {
-              if (widget.selectedHours[hour] == null) {
-                widget.selectedHours[hour] = value;
-              } else {
-                widget.selectedHours[hour] = null;
-              }
-            },
+            onChangeValue: onChangeValue,
           );
         },
-        itemCount: hours.length,
       ),
     ]);
   }

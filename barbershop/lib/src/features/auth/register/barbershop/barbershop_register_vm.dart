@@ -7,45 +7,96 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part "barbershop_register_vm.g.dart";
 
-@Riverpod()
+@riverpod
 class BarbershopRegisterVM extends _$BarbershopRegisterVM {
   @override
   BarbershopRegisterState build() => BarbershopRegisterState.initial();
 
-  Future<void> createBarbershop(
-      ({
-        String name,
-        String email,
-        Iterable<String?> weekDays,
-        Iterable<int?> hours,
-      }) barbershopData) async {
-    final List<String> weekDays = [];
-    final List<int> hours = [];
+  final hours = [
+    "08:00",
+    "09:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+    "21:00",
+    "22:00",
+  ];
 
-    for (var day in barbershopData.weekDays) {
+  void addOrRemoveWeekDay(String day) {
+    final selectedDays = state.selectedDays;
+    if (selectedDays[day] == null) {
+      selectedDays[day] = day;
+    } else {
+      selectedDays[day] = null;
+    }
+
+    state = state.copyWith(selectedDays: () => selectedDays);
+  }
+
+  void addOrRemoveHour(String hour) {
+    final selectedHours = state.selectedHours;
+
+    if (selectedHours[hour] == null) {
+      final intValue = int.parse(hour.split(':')[0]);
+      selectedHours[hour] = intValue;
+    } else {
+      selectedHours[hour] = null;
+    }
+
+    state = state.copyWith(selectedHours: () => selectedHours);
+  }
+
+  List<String> getValidDays() {
+    final List<String> weekDays = [];
+
+    for (var day in state.selectedDays.values) {
       if (day != null) weekDays.add(day);
     }
-    for (var hour in barbershopData.hours) {
+
+    return weekDays;
+  }
+
+  List<int> getValidHours() {
+    final List<int> hours = [];
+
+    for (var hour in state.selectedHours.values) {
       if (hour != null) hours.add(hour);
     }
 
+    return hours;
+  }
+
+  Future<void> createBarbershop(
+    String name,
+    String email,
+  ) async {
     final barbershopRegisterService =
         ref.read(barbershopRegisterServiceProvider);
 
-    final response = await barbershopRegisterService.execute((
-      email: barbershopData.email,
-      name: barbershopData.name,
-      weekDays: weekDays,
-      hours: hours
-    )).asyncLoader();
+    final dto = (
+      name: name,
+      email: email,
+      hours: getValidHours(),
+      weekDays: getValidDays(),
+    );
+
+    final response = await barbershopRegisterService.execute(dto).asyncLoader();
 
     switch (response) {
       case Success():
-        state =
-            BarbershopRegisterState(status: BarbershopRegisterStatus.success);
+        state = state.copyWith(status: () => BarbershopRegisterStatus.success);
       case Failure(exception: ServiceException(message: final message)):
-        state = BarbershopRegisterState(
-            status: BarbershopRegisterStatus.error, errorMessage: message);
+        state = state.copyWith(
+            status: () => BarbershopRegisterStatus.error,
+            errorMessage: () => message);
     }
   }
 }

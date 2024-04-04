@@ -18,8 +18,6 @@ class BarbershopRegisterPage extends ConsumerStatefulWidget {
 
 class _BarbershopRegisterPageState
     extends ConsumerState<BarbershopRegisterPage> {
-  late Map<String, String?> selectedDays;
-  late Map<String, int?> selectedHours;
   late TextEditingController nameEC;
   late TextEditingController emailEC;
   late GlobalKey<FormState> formKey;
@@ -29,8 +27,6 @@ class _BarbershopRegisterPageState
     formKey = GlobalKey<FormState>();
     nameEC = TextEditingController();
     emailEC = TextEditingController();
-    selectedDays = {};
-    selectedHours = {};
     super.initState();
   }
 
@@ -60,24 +56,6 @@ class _BarbershopRegisterPageState
           print('success');
       }
     });
-
-    const hours = [
-      "08:00",
-      "09:00",
-      "10:00",
-      "11:00",
-      "12:00",
-      "13:00",
-      "14:00",
-      "15:00",
-      "16:00",
-      "17:00",
-      "18:00",
-      "19:00",
-      "20:00",
-      "21:00",
-      "22:00",
-    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -120,7 +98,8 @@ class _BarbershopRegisterPageState
             ),
             SliverToBoxAdapter(
               child: WeekdaysPanel(
-                selectedDays: selectedDays,
+                onChangeValue: (newValue) =>
+                    registerVM.addOrRemoveWeekDay(newValue),
               ),
             ),
             const SliverToBoxAdapter(
@@ -139,24 +118,18 @@ class _BarbershopRegisterPageState
               ),
             ),
             SliverGrid.builder(
-              itemCount: hours.length,
+              itemCount: registerVM.hours.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: hours.length ~/ 3,
+                crossAxisCount: registerVM.hours.length ~/ 3,
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 24,
               ),
               itemBuilder: (context, index) {
-                final value = index + 1;
-                final hour = hours[index];
+                final hour = registerVM.hours[index];
                 return BarbershopScheduleButton(
                   label: hour,
-                  onTap: () {
-                    if (selectedHours[hour] == null) {
-                      selectedHours[hour] = value;
-                    } else {
-                      selectedHours[hour] = null;
-                    }
-                  },
+                  onChangeValue: (newValue) =>
+                      registerVM.addOrRemoveHour(newValue),
                 );
               },
             ),
@@ -172,12 +145,10 @@ class _BarbershopRegisterPageState
                     onPressed: () {
                       switch (formKey.currentState?.validate()) {
                         case (true):
-                          registerVM.createBarbershop((
-                            name: nameEC.text,
-                            email: emailEC.text,
-                            weekDays: selectedDays.values,
-                            hours: selectedHours.values,
-                          ));
+                          registerVM.createBarbershop(
+                            nameEC.text,
+                            emailEC.text,
+                          );
                         default:
                           Messages.showError(
                               "Formulário da barbearia inválido", context);

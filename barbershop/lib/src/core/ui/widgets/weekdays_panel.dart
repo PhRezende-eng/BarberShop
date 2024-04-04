@@ -1,15 +1,10 @@
 import 'package:barber_shop/src/core/ui/widgets/schedule_card.dart';
 import 'package:flutter/material.dart';
 
-class WeekdaysPanel extends StatefulWidget {
-  final Map<String, String?> selectedDays;
-  const WeekdaysPanel({required this.selectedDays, super.key});
+class WeekdaysPanel extends StatelessWidget {
+  final void Function(String) onChangeValue;
+  const WeekdaysPanel({required this.onChangeValue, super.key});
 
-  @override
-  State<WeekdaysPanel> createState() => _WeekdaysPanelState();
-}
-
-class _WeekdaysPanelState extends State<WeekdaysPanel> {
   @override
   Widget build(BuildContext context) {
     const days = [
@@ -43,13 +38,7 @@ class _WeekdaysPanelState extends State<WeekdaysPanel> {
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: BarbershopScheduleButton(
                       label: day,
-                      onTap: () {
-                        if (widget.selectedDays[day] == null) {
-                          widget.selectedDays[day] = day;
-                        } else {
-                          widget.selectedDays[day] = null;
-                        }
-                      },
+                      onChangeValue: onChangeValue,
                     ),
                   ),
                 )

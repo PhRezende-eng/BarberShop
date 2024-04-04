@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 
 class BarbershopScheduleButton extends StatefulWidget {
   final String label;
-  final VoidCallback onTap;
+  final void Function(String) onChangeValue;
+
   const BarbershopScheduleButton({
     required this.label,
-    required this.onTap,
+    required this.onChangeValue,
     super.key,
   });
 
@@ -22,7 +23,7 @@ class _BarbershopScheduleButtonState extends State<BarbershopScheduleButton> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        widget.onTap();
+        widget.onChangeValue(widget.label);
         setState(() {
           selected = !selected;
         });
