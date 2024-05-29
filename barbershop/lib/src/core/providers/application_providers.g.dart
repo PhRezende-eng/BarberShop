@@ -20,7 +20,7 @@ final restClientProvider = Provider<RestClient>.internal(
 );
 
 typedef RestClientRef = ProviderRef<RestClient>;
-String _$userRepositoryHash() => r'4a324f69804b6738f220b7c48b19aad627021894';
+String _$userRepositoryHash() => r'f066e8ecb3a71263e0afcf21afd47c8db5aa274e';
 
 /// See also [userRepository].
 @ProviderFor(userRepository)
@@ -51,7 +51,7 @@ final barbershopRepositoryProvider = Provider<BarbershopRepository>.internal(
 );
 
 typedef BarbershopRepositoryRef = ProviderRef<BarbershopRepository>;
-String _$userLoginServiceHash() => r'62431221aac8e45888e74928ecf0b5836e72b999';
+String _$userLoginServiceHash() => r'202e127a6ded5928f18956aa99199eda48b8b10c';
 
 /// See also [userLoginService].
 @ProviderFor(userLoginService)

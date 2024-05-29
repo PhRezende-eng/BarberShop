@@ -23,7 +23,7 @@ class LoginVM extends _$LoginVM {
         ref.invalidate(getMeProvider);
         ref.invalidate(getMyBarbershopProvider);
 
-        final user = await ref.read(getMeProvider.future);
+        final user = await ref.watch(getMeProvider.future);
         switch (user) {
           case UserModelADM():
             state = state.copyWith(status: () => LoginStateStatus.admLogin);
