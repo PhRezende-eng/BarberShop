@@ -80,7 +80,7 @@ class BarbershopRegisterVM extends _$BarbershopRegisterVM {
     String email,
   ) async {
     final barbershopRegisterService =
-        ref.read(barbershopRegisterServiceProvider);
+        ref.watch(barbershopRegisterServiceProvider);
 
     final dto = (
       name: name,

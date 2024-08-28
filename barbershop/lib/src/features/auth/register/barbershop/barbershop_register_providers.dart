@@ -9,6 +9,6 @@ part "barbershop_register_providers.g.dart";
 BarbershopRegisterService barbershopRegisterService(
         BarbershopRegisterServiceRef ref) =>
     BarbershopRegisterServiceImpl(
-      restClient: ref.read(restClientProvider),
-      barbershopRepository: ref.read(barbershopRepositoryProvider),
+      restClient: ref.watch(restClientProvider),
+      barbershopRepository: ref.watch(barbershopRepositoryProvider),
     );

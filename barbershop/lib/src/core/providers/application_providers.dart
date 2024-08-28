@@ -17,7 +17,7 @@ RestClient restClient(RestClientRef ref) => RestClient();
 
 @Riverpod(keepAlive: true)
 UserRepository userRepository(UserRepositoryRef ref) => UserRepositoryImpl(
-      restClient: ref.read(restClientProvider),
+      restClient: ref.watch(restClientProvider),
     );
 
 @Riverpod(keepAlive: true)
@@ -27,7 +27,7 @@ BarbershopRepository barbershopRepository(BarbershopRepositoryRef ref) =>
 @Riverpod(keepAlive: true)
 UserLoginService userLoginService(UserLoginServiceRef ref) =>
     UserLoginServiceImpl(
-      userRepository: ref.read(userRepositoryProvider),
+      userRepository: ref.watch(userRepositoryProvider),
     );
 
 @Riverpod(keepAlive: true)

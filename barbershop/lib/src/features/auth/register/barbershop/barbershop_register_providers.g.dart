@@ -7,7 +7,7 @@ part of 'barbershop_register_providers.dart';
 // **************************************************************************
 
 String _$barbershopRegisterServiceHash() =>
-    r'0f5863fdfcb0ebbcd701a626b0e3acd887de8f54';
+    r'3e5c005e44fe48a5224758b087f093e91315be45';
 
 /// See also [barbershopRegisterService].
 @ProviderFor(barbershopRegisterService)

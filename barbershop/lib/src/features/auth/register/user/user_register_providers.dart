@@ -8,6 +8,6 @@ part "user_register_providers.g.dart";
 @Riverpod(keepAlive: true)
 UserRegisterAdmService userRegisterAdmService(UserRegisterAdmServiceRef ref) =>
     UserRegisterAdmServiceImpl(
-      userLoginService: ref.read(userLoginServiceProvider),
-      userRepository: ref.read(userRepositoryProvider),
+      userLoginService: ref.watch(userLoginServiceProvider),
+      userRepository: ref.watch(userRepositoryProvider),
     );
